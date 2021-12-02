@@ -35,4 +35,11 @@ public class BookService {
         }
     }
 
+    @PostMapping("book")
+    public BookDTO addBook(BookDTO bookDTO) {
+        String url = urlBase + "/book";
+
+        return this.restTemplate.postForEntity(url, bookDTO, BookDTO.class).getBody();
+    }
+
 }

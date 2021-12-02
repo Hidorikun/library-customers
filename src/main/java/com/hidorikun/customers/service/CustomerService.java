@@ -6,6 +6,7 @@ import com.hidorikun.customers.model.entity.Customer;
 import com.hidorikun.customers.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -73,8 +74,8 @@ public class CustomerService {
     }
 
     public List<BookDTO> getBorrowedBooks(long customerId) {
-        BookDTO book = bookService.getBook(1);
-
+//        bookService.addBook(new BookDTO(null, "something inserted by customers", "asdf", null));
+        bookService.updateBook(1L, new BookDTO(1L, "UPDATEEED", "asdf", null));
         return null;
     }
 }
