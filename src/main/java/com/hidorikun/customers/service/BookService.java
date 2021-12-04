@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -35,11 +37,46 @@ public class BookService {
         }
     }
 
-    @PostMapping("book")
+    public List<BookDTO> getBooks() {
+        String url = urlBase + "/books";
+
+        ResponseEntity<BookDTO[]> response = this.restTemplate.getForEntity(url, BookDTO[].class);
+
+        if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            return Arrays.asList(response.getBody());
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<BookDTO> getBooks(List<Long> bookIds) {
+        String url = urlBase + "/books";
+
+        ResponseEntity<BookDTO[]> response = this.restTemplate.postForEntity(url, bookIds, BookDTO[].class);
+
+        if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            return Arrays.asList(response.getBody());
+        }
+
+        return new ArrayList<>();
+    }
+
     public BookDTO addBook(BookDTO bookDTO) {
         String url = urlBase + "/book";
 
         return this.restTemplate.postForEntity(url, bookDTO, BookDTO.class).getBody();
+    }
+
+    public void updateBook(long bookId, BookDTO bookDTO) {
+        String url = urlBase + "book/" + bookId;
+
+        this.restTemplate.put(url, bookDTO);
+    }
+
+    public void removeBook(@PathVariable long bookId) {
+        String url = urlBase + "book/" + bookId;
+
+        this.restTemplate.delete(url, bookId);
     }
 
 }

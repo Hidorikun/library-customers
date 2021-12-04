@@ -5,12 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDTO {
+public class BorrowingDTO {
     private Long id;
-    private String firstName;
-    private String lastName;
+    private Long bookId;
+    private Long customerId;
+    private Date borrowedOn;
+    private Date returnedOn;
 }

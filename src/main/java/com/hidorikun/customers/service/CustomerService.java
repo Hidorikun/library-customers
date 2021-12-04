@@ -1,6 +1,7 @@
 package com.hidorikun.customers.service;
 
 import com.hidorikun.customers.model.dto.BookDTO;
+import com.hidorikun.customers.model.dto.BorrowingDTO;
 import com.hidorikun.customers.model.dto.CustomerDTO;
 import com.hidorikun.customers.model.entity.Customer;
 import com.hidorikun.customers.repository.CustomerRepository;
@@ -8,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     private CustomerRepository customerRepository;
     private BookService bookService;
+    private BorrowingService borrowingService;
 
     private CustomerDTO customerToDTO(Customer customer) {
         if (customer == null) {
@@ -42,10 +45,12 @@ public class CustomerService {
 
     public CustomerService(
             final CustomerRepository customerRepository,
-            final BookService bookService
+            final BookService bookService,
+            final BorrowingService borrowingService
     ) {
         this.customerRepository = customerRepository;
         this.bookService = bookService;
+        this.borrowingService = borrowingService;
     }
 
     public CustomerDTO getCustomer(long customerId) {
@@ -74,8 +79,8 @@ public class CustomerService {
     }
 
     public List<BookDTO> getBorrowedBooks(long customerId) {
-//        bookService.addBook(new BookDTO(null, "something inserted by customers", "asdf", null));
-        bookService.updateBook(1L, new BookDTO(1L, "UPDATEEED", "asdf", null));
-        return null;
+        List<BorrowingDTO> borrowings = borrowingService.getBorrowingsByCustomers(customerId);
+        List<Long> bookIds = borrowings.stream().map(BorrowingDTO::getBookId).collect(Collectors.toList());
+        return bookService.getBooks(bookIds);
     }
 }
