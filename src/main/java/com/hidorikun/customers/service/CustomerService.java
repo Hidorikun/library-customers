@@ -7,6 +7,7 @@ import com.hidorikun.customers.model.entity.Customer;
 import com.hidorikun.customers.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,5 +83,13 @@ public class CustomerService {
         List<BorrowingDTO> borrowings = borrowingService.getBorrowingsByCustomers(customerId);
         List<Long> bookIds = borrowings.stream().map(BorrowingDTO::getBookId).collect(Collectors.toList());
         return bookService.getBooks(bookIds);
+    }
+
+    public List<CustomerDTO> getCustomers() {
+        List<CustomerDTO> customers = new ArrayList<>();
+
+        customerRepository.findAll().forEach(customer -> customers.add(customerToDTO(customer)));
+
+        return customers;
     }
 }

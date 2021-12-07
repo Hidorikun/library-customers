@@ -17,6 +17,11 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @GetMapping("customers")
+    public ResponseEntity<List<CustomerDTO>> getCustomers() {
+        return ResponseEntity.ok(customerService.getCustomers());
+    }
+
     @GetMapping("customer/{customerId}")
     public ResponseEntity<CustomerDTO> getCustomer(@PathVariable() long customerId) {
         CustomerDTO customerDTO = customerService.getCustomer(customerId);
